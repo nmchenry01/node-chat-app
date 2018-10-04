@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava --verbose --color --watch"
   },
   "author": "Nicholas McHenry",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
     "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "ava": "1.0.0-beta.8"
   }
 }
