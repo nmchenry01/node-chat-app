@@ -9,22 +9,25 @@ socket.on("disconnect", function() {
 });
 
 socket.on("newMessage", function(message) {
-  var formattedTime = moment(message.createdAt).format('h:mm a');
-  var li = $("<li></li>");
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
-
-  $("#messages").append(li);
+  var formattedTime = moment(message.createdAt).format("h:mm a");
+  var template = $("#message-template").html();
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
+  $("#messages").append(html);
 });
 
 socket.on("newLocationMessage", function(message) {
-  var formattedTime = moment(message.createdAt).format('h:mm a');
-  var li = $("<li></li>");
-  var a = $('<a target="_blank">My Current Location</a>');
-
-  li.text(`${message.from} ${formattedTime}: `);
-  a.attr("href", message.url);
-  li.append(a);
-  $("#messages").append(li);
+  var formattedTime = moment(message.createdAt).format("h:mm a");
+  var template = $("#location-message-template").html();
+  var html = Mustache.render(template, {
+    url: message.url,
+    from: message.from,
+    createdAt: formattedTime
+  });
+  $("#messages").append(html);
 });
 
 $("#message-form").on("submit", function(e) {
@@ -51,17 +54,17 @@ locationButton.on("click", function() {
     return alert("Your browser does not support Geolocation.");
   }
 
-  locationButton.attr("disabled", true).text('Sending location...');
+  locationButton.attr("disabled", true).text("Sending location...");
   navigator.geolocation.getCurrentPosition(
     function(position) {
-      locationButton.attr("disabled", false).text('Send location');
+      locationButton.attr("disabled", false).text("Send location");
       socket.emit("createLocationMessage", {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
       });
     },
     function() {
-      locationButton.attr("disabled", false).text('Send location');
+      locationButton.attr("disabled", false).text("Send location");
       alert("Unable to fetch location");
     }
   );
