@@ -4,7 +4,7 @@
   "description": "A basic chat app leveraging socket.io",
   "main": "index.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "nodemon server/server.js",
     "test": "ava --verbose --color --watch"
   },
   "author": "Nicholas McHenry",
